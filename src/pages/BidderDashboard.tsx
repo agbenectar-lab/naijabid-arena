@@ -5,13 +5,39 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { ContactSellerModal } from "@/components/contact/ContactSellerModal";
+import { RatingReviewModal } from "@/components/review/RatingReviewModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Gavel, Heart, Package, Trophy, TrendingUp, Clock, Eye } from "lucide-react";
+import { useUserRole } from "@/hooks/useUserRole";
+import { Gavel, Heart, Package, Trophy, TrendingUp, Clock, Eye, MessageCircle, Star } from "lucide-react";
 
 export default function BidderDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { role, permissions } = useUserRole();
+  
+  const [contactModal, setContactModal] = useState<{
+    isOpen: boolean;
+    sellerName: string;
+    auctionTitle: string;
+  }>({
+    isOpen: false,
+    sellerName: "",
+    auctionTitle: ""
+  });
+  
+  const [reviewModal, setReviewModal] = useState<{
+    isOpen: boolean;
+    auctionTitle: string;
+    sellerName: string;
+    orderId?: string;
+  }>({
+    isOpen: false,
+    auctionTitle: "",
+    sellerName: "",
+    orderId: ""
+  });
 
   const activeBids = [
     {
@@ -70,6 +96,23 @@ export default function BidderDashboard() {
     { label: "Won Auctions", value: "3", icon: Trophy, color: "text-yellow-600" },
     { label: "Success Rate", value: "85%", icon: TrendingUp, color: "text-green-600" }
   ];
+  
+  const openContactModal = (sellerName: string, auctionTitle: string) => {
+    setContactModal({
+      isOpen: true,
+      sellerName,
+      auctionTitle
+    });
+  };
+
+  const openReviewModal = (auctionTitle: string, sellerName: string, orderId?: string) => {
+    setReviewModal({
+      isOpen: true,
+      auctionTitle,
+      sellerName,
+      orderId
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -78,7 +121,14 @@ export default function BidderDashboard() {
       <main className="flex-1 container py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.name}!</h1>
-          <p className="text-muted-foreground">Track your bids, manage your watchlist, and discover new auctions.</p>
+          <div className="flex items-center gap-2">
+            <p className="text-muted-foreground">
+              Your {role} dashboard - Manage your auction activities
+            </p>
+            <Badge variant={role === 'auctioneer' ? 'default' : 'secondary'}>
+              {role.charAt(0).toUpperCase() + role.slice(1)}
+            </Badge>
+          </div>
         </div>
 
         {/* Stats */}
@@ -146,13 +196,23 @@ export default function BidderDashboard() {
                         >
                           {bid.status === "leading" ? "Leading" : "Outbid"}
                         </Badge>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => navigate(`/auction/${bid.id}`)}
-                        >
-                          View
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => openContactModal("Seller Name", bid.title)}
+                          >
+                            <MessageCircle className="h-4 w-4 mr-1" />
+                            Contact
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => navigate(`/auction/${bid.id}`)}
+                          >
+                            View
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -269,12 +329,39 @@ export default function BidderDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12">
-                  <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No orders yet</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    When you win auctions and complete payments, your orders will appear here.
-                  </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 p-4 border rounded-lg">
+                    <img 
+                      src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300"
+                      alt="Sample order"
+                      className="w-16 h-16 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold">Nike Air Jordan 1 Retro</h3>
+                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                        <span>Final bid: ₦125,000</span>
+                        <span>Delivered: Jan 20, 2024</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => openContactModal("Nike Store", "Nike Air Jordan 1 Retro")}
+                      >
+                        <MessageCircle className="h-4 w-4 mr-1" />
+                        Contact
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => openReviewModal("Nike Air Jordan 1 Retro", "Nike Store", "ORD-2024-001")}
+                      >
+                        <Star className="h-4 w-4 mr-1" />
+                        Review
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -283,6 +370,22 @@ export default function BidderDashboard() {
       </main>
 
       <Footer />
+      
+      {/* Modals */}
+      <ContactSellerModal
+        isOpen={contactModal.isOpen}
+        onClose={() => setContactModal(prev => ({ ...prev, isOpen: false }))}
+        sellerName={contactModal.sellerName}
+        auctionTitle={contactModal.auctionTitle}
+      />
+      
+      <RatingReviewModal
+        isOpen={reviewModal.isOpen}
+        onClose={() => setReviewModal(prev => ({ ...prev, isOpen: false }))}
+        auctionTitle={reviewModal.auctionTitle}
+        sellerName={reviewModal.sellerName}
+        orderId={reviewModal.orderId}
+      />
     </div>
   );
 }

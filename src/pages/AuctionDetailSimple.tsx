@@ -6,11 +6,12 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { BiddingPanel } from "@/components/auction/BiddingPanel";
 import { BidHistoryPanel } from "@/components/auction/BidHistoryPanel";
 import { CountdownDisplay } from "@/components/auction/AuctionTimer";
+import { ContactSellerModal } from "@/components/contact/ContactSellerModal";
 import { sampleAuctions } from "@/data/sampleAuctions";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { User, Package, Shield, Star } from "lucide-react";
+import { User, Package, Shield, Star, MessageCircle } from "lucide-react";
 
 export default function AuctionDetailSimple() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function AuctionDetailSimple() {
   const auction = sampleAuctions.find(a => a.id === id);
   
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   if (!auction) {
     return (
@@ -97,6 +99,17 @@ export default function AuctionDetailSimple() {
                   <span className="text-sm">4.8/5 rating</span>
                 </div>
               </div>
+              
+              <div className="mt-4 pt-4 border-t">
+                <Button 
+                  onClick={() => setShowContactModal(true)}
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  Contact Seller
+                </Button>
+              </div>
             </div>
 
             {/* Bid History */}
@@ -122,6 +135,13 @@ export default function AuctionDetailSimple() {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onAuthSuccess={() => setShowAuthModal(false)}
+      />
+      
+      <ContactSellerModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        sellerName={auction.seller}
+        auctionTitle={auction.title}
       />
     </div>
   );
