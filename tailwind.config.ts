@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					hover: 'hsl(var(--primary-hover))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -42,7 +43,16 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					foreground: 'hsl(var(--accent-foreground))',
+					hover: 'hsl(var(--accent-hover))'
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -84,11 +94,42 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-bid': {
+					'0%, 100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					},
+					'50%': {
+						transform: 'scale(1.05)',
+						opacity: '0.8'
+					}
+				},
+				'countdown': {
+					'0%': {
+						transform: 'scale(1)'
+					},
+					'50%': {
+						transform: 'scale(1.1)'
+					},
+					'100%': {
+						transform: 'scale(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-bid': 'pulse-bid 2s ease-in-out infinite',
+				'countdown': 'countdown 1s ease-in-out'
+			},
+			boxShadow: {
+				'card': 'var(--card-shadow)',
+				'card-hover': 'var(--card-shadow-hover)'
+			},
+			backgroundImage: {
+				'auction-gradient': 'var(--auction-gradient)',
+				'bid-gradient': 'var(--bid-gradient)'
 			}
 		}
 	},

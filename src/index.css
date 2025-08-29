@@ -2,39 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Nigerian Auction Platform Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 99%;
+    --foreground: 216 12% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 216 12% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 216 12% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Nigerian Green Primary */
+    --primary: 148 100% 26%;
+    --primary-foreground: 0 0% 98%;
+    --primary-hover: 148 100% 22%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Clean Secondary */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 216 12% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Warm Accent for Bidding */
+    --accent: 25 95% 53%;
+    --accent-foreground: 0 0% 98%;
+    --accent-hover: 25 95% 48%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Success for winning bids */
+    --success: 148 100% 26%;
+    --success-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Warning for ending soon */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 148 100% 26%;
+
+    /* Custom auction variables */
+    --auction-gradient: linear-gradient(135deg, hsl(148 100% 26%), hsl(148 100% 32%));
+    --bid-gradient: linear-gradient(135deg, hsl(25 95% 53%), hsl(25 95% 58%));
+    --card-shadow: 0 4px 6px -1px hsl(220 13% 91% / 0.1), 0 2px 4px -1px hsl(220 13% 91% / 0.06);
+    --card-shadow-hover: 0 10px 15px -3px hsl(220 13% 91% / 0.2), 0 4px 6px -2px hsl(220 13% 91% / 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 
