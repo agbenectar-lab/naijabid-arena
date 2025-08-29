@@ -9,6 +9,7 @@ import { AuctionProvider } from "@/contexts/AuctionContext";
 import Index from "./pages/Index";
 import AuctionDetail from "./pages/AuctionDetailSimple";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import PaymentFlow from "./pages/PaymentFlow";
 import OrderTracking from "./pages/OrderTracking";
 import CreateAuction from "./pages/CreateAuction";
@@ -31,10 +32,10 @@ const App = () => (
               <Route path="/auctions" element={<Auctions />} />
               <Route path="/auction/:id" element={<AuctionDetail />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               {/* Redirect old dashboard routes to unified dashboard */}
               <Route path="/bidder-dashboard" element={<Navigate to="/dashboard" replace />} />
               <Route path="/auctioneer-dashboard" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/create-auction" element={<CreateAuction />} />
               <Route path="/create-auction" element={<CreateAuction />} />
               <Route path="/payment/:id" element={<PaymentFlow />} />
               <Route path="/order-tracking/:id" element={<OrderTracking />} />

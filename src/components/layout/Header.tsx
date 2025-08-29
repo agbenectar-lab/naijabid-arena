@@ -83,9 +83,16 @@ export function Header() {
             </Button>
             
             {isAuthenticated ? (
-              <Button variant="outline" size="sm" onClick={logout}>
-                Logout
-              </Button>
+              <>
+                {user?.email === "admin@oyabid.com" && (
+                  <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
+                    Admin
+                  </Button>
+                )}
+                <Button variant="outline" size="sm" onClick={logout}>
+                  Logout
+                </Button>
+              </>
             ) : (
               <Button variant="hero" size="sm" onClick={() => setShowAuthModal(true)}>
                 Login
