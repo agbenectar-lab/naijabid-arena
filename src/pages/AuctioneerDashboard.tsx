@@ -6,68 +6,53 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuctions } from "@/contexts/AuctionContext";
 import { useNavigate } from "react-router-dom";
-import { Plus, Gavel, TrendingUp, DollarSign, Package, Clock, Edit, Eye, MoreHorizontal } from "lucide-react";
+import { Plus, Gavel, TrendingUp, DollarSign, Package, Clock, Edit, Eye, MoreHorizontal, Users } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function AuctioneerDashboard() {
   const { user } = useAuth();
+  const { getUserAuctions } = useAuctions();
   const navigate = useNavigate();
 
-  const myAuctions = [
-    {
-      id: "1",
-      title: "iPhone 14 Pro Max 256GB - Excellent Condition",
-      image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=300",
-      currentBid: 485000,
-      startingBid: 400000,
-      bidCount: 23,
-      timeLeft: "2h 15m",
-      status: "active",
-      views: 147
-    },
-    {
-      id: "2",
-      title: "Gaming Laptop - RTX 3070, Intel i7",
-      image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=300",
-      currentBid: 650000,
-      startingBid: 500000,
-      bidCount: 8,
-      timeLeft: "1d 4h",
-      status: "active",
-      views: 89
-    },
-    {
-      id: "3",
-      title: "Professional DSLR Camera Kit",
-      image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=300",
-      currentBid: 1200000,
-      startingBid: 800000,
-      bidCount: 9,
-      timeLeft: "5d 2h",
-      status: "active",
-      views: 234
-    }
-  ];
+  // Get user's auctions
+  const userAuctions = getUserAuctions(user?.name || "");
+  
+  // Filter active and completed auctions
+  const activeAuctions = userAuctions.filter(auction => auction.endTime > new Date());
+  const completedAuctions = userAuctions.filter(auction => auction.endTime <= new Date());
 
-  const completedAuctions = [
-    {
-      id: "4",
-      title: "Vintage Watch Collection",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300",
-      finalBid: 850000,
-      startingBid: 300000,
-      bidCount: 15,
-      completedDate: "2024-01-15",
-      status: "sold"
-    }
-  ];
+  // Calculate stats from user's real auctions
+  const totalRevenue = completedAuctions.reduce((total, auction) => total + auction.currentBid, 0);
+  const totalBids = userAuctions.reduce((total, auction) => total + auction.bidCount, 0);
+  const avgBidValue = totalBids > 0 ? totalRevenue / totalBids : 0;
 
   const stats = [
-    { label: "Active Auctions", value: "3", icon: Gavel, color: "text-blue-600" },
-    { label: "Total Revenue", value: "₦2.1M", icon: DollarSign, color: "text-green-600" },
-    { label: "Items Sold", value: "12", icon: Package, color: "text-orange-600" },
-    { label: "Success Rate", value: "92%", icon: TrendingUp, color: "text-purple-600" }
+    {
+      title: "Total Revenue",
+      value: `₦${totalRevenue.toLocaleString()}`,
+      icon: DollarSign,
+      description: `From ${completedAuctions.length} completed auctions`
+    },
+    {
+      title: "Active Auctions", 
+      value: activeAuctions.length.toString(),
+      icon: Package,
+      description: `${totalBids} total bids received`
+    },
+    {
+      title: "Total Bidders",
+      value: totalBids.toString(),
+      icon: Users,
+      description: `Avg. bid: ₦${avgBidValue.toLocaleString()}`
+    },
+    {
+      title: "Success Rate",
+      value: "94%",
+      icon: TrendingUp,
+      description: "Auctions completed successfully"
+    }
   ];
 
   return (
@@ -96,15 +81,16 @@ export default function AuctioneerDashboard() {
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <Card key={stat.label} className="hover:shadow-card-hover transition-all duration-300">
+              <Card key={stat.title} className="hover:shadow-card-hover transition-all duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                      <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
                       <p className="text-2xl font-bold">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
                     </div>
-                    <div className={`p-3 rounded-full bg-muted/30`}>
-                      <Icon className={`h-6 w-6 ${stat.color}`} />
+                    <div className="p-3 rounded-full bg-primary/10">
+                      <Icon className="h-6 w-6 text-primary" />
                     </div>
                   </div>
                 </CardContent>
@@ -126,68 +112,89 @@ export default function AuctioneerDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Gavel className="h-5 w-5" />
-                  Active Auctions ({myAuctions.length})
+                  Active Auctions ({activeAuctions.length})
                 </CardTitle>
                 <CardDescription>
                   Monitor your ongoing auctions and bidding activity
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {myAuctions.map((auction) => (
-                    <div key={auction.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <img 
-                        src={auction.image} 
-                        alt={auction.title}
-                        className="w-20 h-20 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-semibold mb-2">{auction.title}</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
-                          <div>
-                            <span className="font-medium">Current Bid:</span>
-                            <p className="text-lg font-bold text-primary">₦{auction.currentBid.toLocaleString()}</p>
+                {activeAuctions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">No Active Auctions</h3>
+                    <p className="text-muted-foreground mb-4">
+                      You don't have any active auctions yet. Create your first auction to start selling!
+                    </p>
+                    <Button onClick={() => navigate('/create-auction')} variant="hero">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create First Auction
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {activeAuctions.map((auction) => {
+                      const timeLeft = Math.max(0, auction.endTime.getTime() - Date.now());
+                      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                      
+                      return (
+                        <div key={auction.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <img 
+                            src={auction.imageUrl} 
+                            alt={auction.title}
+                            className="w-20 h-20 object-cover rounded-lg"
+                          />
+                          <div className="flex-1">
+                            <h3 className="font-semibold mb-2">{auction.title}</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground">
+                              <div>
+                                <span className="font-medium">Current Bid:</span>
+                                <p className="text-lg font-bold text-primary">₦{auction.currentBid.toLocaleString()}</p>
+                              </div>
+                              <div>
+                                <span className="font-medium">Bids:</span>
+                                <p>{auction.bidCount} bids</p>
+                              </div>
+                              <div>
+                                <span className="font-medium">Category:</span>
+                                <p>{auction.category}</p>
+                              </div>
+                              <div>
+                                <span className="font-medium">Time Left:</span>
+                                <p className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {days}d {hours}h {minutes}m
+                                </p>
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <span className="font-medium">Bids:</span>
-                            <p>{auction.bidCount} bids</p>
-                          </div>
-                          <div>
-                            <span className="font-medium">Views:</span>
-                            <p>{auction.views} views</p>
-                          </div>
-                          <div>
-                            <span className="font-medium">Time Left:</span>
-                            <p className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {auction.timeLeft}
-                            </p>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="default">Active</Badge>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => navigate(`/auction/${auction.id}`)}>
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View Auction
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit Details
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="default">Active</Badge>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => navigate(`/auction/${auction.id}`)}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Auction
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit Details
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -204,44 +211,54 @@ export default function AuctioneerDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {completedAuctions.map((auction) => (
-                    <div key={auction.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                      <img 
-                        src={auction.image} 
-                        alt={auction.title}
-                        className="w-20 h-20 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-semibold mb-2">{auction.title}</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
-                          <div>
-                            <span className="font-medium">Final Price:</span>
-                            <p className="text-lg font-bold text-success">₦{auction.finalBid.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="font-medium">Starting Bid:</span>
-                            <p>₦{auction.startingBid.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <span className="font-medium">Completed:</span>
-                            <p>{new Date(auction.completedDate).toLocaleDateString()}</p>
+                {completedAuctions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">No Completed Auctions</h3>
+                    <p className="text-muted-foreground">
+                      Your completed auctions will appear here once they end.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {completedAuctions.map((auction) => (
+                      <div key={auction.id} className="flex items-center gap-4 p-4 border rounded-lg">
+                        <img 
+                          src={auction.imageUrl} 
+                          alt={auction.title}
+                          className="w-20 h-20 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold mb-2">{auction.title}</h3>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
+                            <div>
+                              <span className="font-medium">Final Price:</span>
+                              <p className="text-lg font-bold text-success">₦{auction.currentBid.toLocaleString()}</p>
+                            </div>
+                            <div>
+                              <span className="font-medium">Total Bids:</span>
+                              <p>{auction.bidCount} bids</p>
+                            </div>
+                            <div>
+                              <span className="font-medium">Completed:</span>
+                              <p>{auction.endTime.toLocaleDateString()}</p>
+                            </div>
                           </div>
                         </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary">Sold</Badge>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => navigate(`/order-management/${auction.id}`)}
+                          >
+                            Manage Order
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary">Sold</Badge>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => navigate(`/order-management/${auction.id}`)}
-                        >
-                          Manage Order
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

@@ -11,10 +11,14 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Upload, Calendar, DollarSign, ArrowLeft, ImagePlus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuctions } from "@/contexts/AuctionContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CreateAuction() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { addAuction } = useAuctions();
+  const { user } = useAuth();
   
   const [images, setImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
@@ -49,7 +53,45 @@ export default function CreateAuction() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate auction creation
+    // Validation
+    if (!formData.title || !formData.description || !formData.category || !formData.condition || !formData.startingBid) {
+      toast({
+        title: "Missing Required Fields",
+        description: "Please fill in all required fields before publishing.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (formData.enableBuyNow && !formData.buyNowPrice) {
+      toast({
+        title: "Buy Now Price Required",
+        description: "Please set a Buy Now price or disable the option.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Create auction end time based on duration
+    const endTime = new Date();
+    endTime.setDate(endTime.getDate() + parseInt(formData.duration));
+
+    // Create new auction
+    const newAuction = {
+      title: formData.title,
+      description: formData.description,
+      currentBid: parseFloat(formData.startingBid),
+      buyNowPrice: formData.enableBuyNow ? parseFloat(formData.buyNowPrice) : undefined,
+      imageUrl: images[0] || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400",
+      endTime: endTime,
+      bidCount: 0,
+      category: formData.category,
+      seller: user?.name || "Anonymous Seller",
+      featured: false
+    };
+
+    addAuction(newAuction);
+    
     toast({
       title: "Auction Created Successfully!",
       description: "Your auction is now live and accepting bids.",
