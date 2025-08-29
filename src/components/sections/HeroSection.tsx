@@ -1,9 +1,32 @@
 import { Search, TrendingUp, Shield, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
+import { AuthModal } from "@/components/auth/AuthModal";
 import heroImage from "@/assets/hero-auction.jpg";
 
 export function HeroSection() {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, login } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleStartBidding = () => {
+    navigate('/auctions');
+  };
+
+  const handleSellItems = () => {
+    if (isAuthenticated && user?.role === 'auctioneer') {
+      navigate('/create-auction');
+    } else if (isAuthenticated && user?.role === 'bidder') {
+      // Show message that they need auctioneer account
+      setShowAuthModal(true);
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
   return (
     <section className="relative bg-gradient-to-br from-background via-background to-primary/5 py-20 overflow-hidden">
       {/* Background Image with Overlay */}
@@ -47,10 +70,10 @@ export function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" onClick={handleStartBidding}>
                 Start Bidding
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={handleSellItems}>
                 Sell Your Items
               </Button>
             </div>
@@ -113,6 +136,12 @@ export function HeroSection() {
           </div>
         </div>
       </div>
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuthSuccess={login}
+      />
     </section>
   );
 }
