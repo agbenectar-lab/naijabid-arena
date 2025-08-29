@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AuctionProvider } from "@/contexts/AuctionContext";
 import Index from "./pages/Index";
@@ -31,6 +31,9 @@ const App = () => (
               <Route path="/auctions" element={<Auctions />} />
               <Route path="/auction/:id" element={<AuctionDetail />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              {/* Redirect old dashboard routes to unified dashboard */}
+              <Route path="/bidder-dashboard" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/auctioneer-dashboard" element={<Navigate to="/dashboard" replace />} />
               <Route path="/create-auction" element={<CreateAuction />} />
               <Route path="/create-auction" element={<CreateAuction />} />
               <Route path="/payment/:id" element={<PaymentFlow />} />
