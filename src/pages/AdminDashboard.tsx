@@ -6,42 +6,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import UserManagement from "@/components/admin/UserManagement";
+import AuctionManagement from "@/components/admin/AuctionManagement";
+import FinancialManagement from "@/components/admin/FinancialManagement";
+import ContentModeration from "@/components/admin/ContentModeration";
+import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
+import SystemSettings from "@/components/admin/SystemSettings";
 import { 
   Users, Gavel, DollarSign, Activity, Settings, TrendingUp, 
-  Shield, MessageSquare, Megaphone, BarChart3, Search, 
-  Filter, MoreHorizontal, Ban, CheckCircle, XCircle,
-  Eye, Edit, Trash2, UserCheck, UserX, AlertTriangle
+  Shield, MessageSquare, Megaphone, BarChart3
 } from "lucide-react";
 
 const AdminDashboard: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Mock data
-  const users = [
-    { id: 1, name: "John Doe", email: "john@example.com", role: "bidder", status: "active", joinDate: "2024-01-15", totalSpent: "₦234,500" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "auctioneer", status: "active", joinDate: "2024-02-10", totalSpent: "₦0" },
-    { id: 3, name: "Bob Wilson", email: "bob@example.com", role: "bidder", status: "suspended", joinDate: "2024-01-20", totalSpent: "₦89,200" },
-  ];
-
-  const auctions = [
-    { id: 1, title: "Vintage Watch Collection", auctioneer: "Jane Smith", status: "active", currentBid: "₦45,000", endDate: "2024-12-01", bids: 23 },
-    { id: 2, title: "Art Painting Original", auctioneer: "Mike Johnson", status: "ended", currentBid: "₦125,000", endDate: "2024-11-25", bids: 45 },
-    { id: 3, title: "Electronics Bundle", auctioneer: "Sarah Davis", status: "pending", currentBid: "₦0", endDate: "2024-12-05", bids: 0 },
-  ];
-
-  const transactions = [
-    { id: 1, user: "John Doe", amount: "₦45,000", type: "payment", status: "completed", date: "2024-11-25", auction: "Vintage Watch" },
-    { id: 2, user: "Bob Wilson", amount: "₦125,000", type: "payment", status: "pending", date: "2024-11-24", auction: "Art Painting" },
-    { id: 3, user: "Alice Brown", amount: "₦2,250", type: "commission", status: "completed", date: "2024-11-23", auction: "Electronics" },
-  ];
-
-  const reports = [
-    { id: 1, reporter: "User123", type: "inappropriate content", item: "Auction #234", status: "pending", date: "2024-11-25" },
-    { id: 2, reporter: "SafetyFirst", type: "fake item", item: "Auction #189", status: "resolved", date: "2024-11-24" },
-    { id: 3, reporter: "TrustGuard", type: "spam behavior", item: "User Profile", status: "investigating", date: "2024-11-23" },
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,354 +102,32 @@ const AdminDashboard: React.FC = () => {
 
           {/* User Management */}
           <TabsContent value="users">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>User Management</CardTitle>
-                  <div className="flex gap-2">
-                    <div className="relative">
-                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input 
-                        placeholder="Search users..." 
-                        className="pl-8 w-64"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4 mr-2" />
-                      Filter
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-96">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Total Spent</TableHead>
-                        <TableHead>Join Date</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {users.map((user) => (
-                        <TableRow key={user.id}>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">{user.name}</div>
-                              <div className="text-sm text-muted-foreground">{user.email}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={user.role === "auctioneer" ? "default" : "secondary"}>
-                              {user.role}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={user.status === "active" ? "default" : "destructive"}>
-                              {user.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{user.totalSpent}</TableCell>
-                          <TableCell>{user.joinDate}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                {user.status === "active" ? <Ban className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+            <UserManagement />
           </TabsContent>
 
           {/* Auction Management */}
           <TabsContent value="auctions">
-            <Card>
-              <CardHeader>
-                <CardTitle>Auction Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-96">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Auction</TableHead>
-                        <TableHead>Auctioneer</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Current Bid</TableHead>
-                        <TableHead>Bids</TableHead>
-                        <TableHead>End Date</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {auctions.map((auction) => (
-                        <TableRow key={auction.id}>
-                          <TableCell className="font-medium">{auction.title}</TableCell>
-                          <TableCell>{auction.auctioneer}</TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              auction.status === "active" ? "default" : 
-                              auction.status === "ended" ? "secondary" : "outline"
-                            }>
-                              {auction.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{auction.currentBid}</TableCell>
-                          <TableCell>{auction.bids}</TableCell>
-                          <TableCell>{auction.endDate}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <Ban className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+            <AuctionManagement />
           </TabsContent>
 
           {/* Financial Management */}
           <TabsContent value="financial">
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Total Revenue</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₦8,945,230</div>
-                    <p className="text-xs text-emerald-600">+12.5% from last month</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Pending Payments</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₦234,890</div>
-                    <p className="text-xs text-amber-600">23 transactions</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-sm">Commission Earned</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">₦447,261</div>
-                    <p className="text-xs text-emerald-600">5% average rate</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Transactions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-80">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>User</TableHead>
-                          <TableHead>Amount</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Auction</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {transactions.map((transaction) => (
-                          <TableRow key={transaction.id}>
-                            <TableCell>{transaction.user}</TableCell>
-                            <TableCell className="font-medium">{transaction.amount}</TableCell>
-                            <TableCell>
-                              <Badge variant="outline">{transaction.type}</Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={transaction.status === "completed" ? "default" : "secondary"}>
-                                {transaction.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>{transaction.date}</TableCell>
-                            <TableCell>{transaction.auction}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            </div>
+            <FinancialManagement />
           </TabsContent>
 
           {/* Content Moderation */}
           <TabsContent value="moderation">
-            <Card>
-              <CardHeader>
-                <CardTitle>Content Moderation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-96">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Reporter</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Item</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {reports.map((report) => (
-                        <TableRow key={report.id}>
-                          <TableCell>{report.reporter}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{report.type}</Badge>
-                          </TableCell>
-                          <TableCell>{report.item}</TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              report.status === "resolved" ? "default" : 
-                              report.status === "pending" ? "secondary" : "destructive"
-                            }>
-                              {report.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{report.date}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <CheckCircle className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <XCircle className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <AlertTriangle className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+            <ContentModeration />
           </TabsContent>
 
           {/* Analytics */}
           <TabsContent value="analytics">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Daily Active Users</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">2,847</div>
-                  <p className="text-xs text-emerald-600">+8.2% today</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Conversion Rate</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">3.4%</div>
-                  <p className="text-xs text-emerald-600">+0.5% this week</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Avg Session Time</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">12m 34s</div>
-                  <p className="text-xs text-emerald-600">+2m from last week</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm">Bounce Rate</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">24.1%</div>
-                  <p className="text-xs text-red-600">-3.2% improvement</p>
-                </CardContent>
-              </Card>
-            </div>
+            <AnalyticsDashboard />
           </TabsContent>
 
           {/* Settings */}
           <TabsContent value="settings">
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Platform Settings</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Commission Rates</h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm">Buyer Commission (%)</label>
-                        <Input type="number" defaultValue="2.5" />
-                      </div>
-                      <div>
-                        <label className="text-sm">Seller Commission (%)</label>
-                        <Input type="number" defaultValue="5.0" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Auction Settings</h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm">Min Auction Duration (hours)</label>
-                        <Input type="number" defaultValue="24" />
-                      </div>
-                      <div>
-                        <label className="text-sm">Max Auction Duration (days)</label>
-                        <Input type="number" defaultValue="30" />
-                      </div>
-                    </div>
-                  </div>
-                  <Button>Save Settings</Button>
-                </CardContent>
-              </Card>
-            </div>
+            <SystemSettings />
           </TabsContent>
 
           {/* Marketing */}
