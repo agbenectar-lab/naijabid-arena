@@ -10,6 +10,9 @@ export interface Auction {
   category: string;
   seller: string;
   featured?: boolean;
+  kycRequired?: boolean;
+  sellerKycTier?: 1 | 2;
+  status?: "active" | "cancelled" | "ended";
 }
 
 // Create end times for various auctions
@@ -116,6 +119,24 @@ export const sampleAuctions: Auction[] = [
     endTime: oneWeek,
     bidCount: 9,
     category: "Electronics",
-    seller: "PhotoPro Equipment"
+    seller: "PhotoPro Equipment",
+    kycRequired: true,
+    sellerKycTier: 2,
+    status: "active"
+  },
+  {
+    id: "9",
+    title: "Luxury Diamond Necklace",
+    description: "18k gold necklace with certified diamonds. Appraised value ₦15M. Comes with authenticity certificate.",
+    currentBid: 12500000,
+    buyNowPrice: 15000000,
+    imageUrl: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400",
+    endTime: oneWeek,
+    bidCount: 3,
+    category: "Jewelry",
+    seller: "Precious Gems Ltd",
+    kycRequired: true,
+    sellerKycTier: 2,
+    status: "active"
   }
 ];

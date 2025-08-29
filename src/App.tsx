@@ -14,6 +14,7 @@ import PaymentFlow from "./pages/PaymentFlow";
 import OrderTracking from "./pages/OrderTracking";
 import CreateAuction from "./pages/CreateAuction";
 import Auctions from "./pages/Auctions";
+import BusinessFeatures from "./pages/BusinessFeatures";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/create-auction" element={<CreateAuction />} />
               <Route path="/payment/:id" element={<PaymentFlow />} />
               <Route path="/order-tracking/:id" element={<OrderTracking />} />
+              <Route path="/business-features" element={<BusinessFeatures />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
