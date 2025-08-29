@@ -4,8 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Gavel, ShoppingBag, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -19,7 +18,8 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
     name: "",
     email: "",
     password: "",
-    role: "bidder"
+    mobile: "",
+    role: "bidder" // Default role for all users (can both bid and sell)
   });
 
   if (!isOpen) return null;
@@ -134,6 +134,18 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
                 </div>
                 
                 <div className="space-y-2">
+                  <Label htmlFor="signup-mobile">Mobile Number</Label>
+                  <Input
+                    id="signup-mobile"
+                    type="tel"
+                    placeholder="Enter your mobile number"
+                    value={formData.mobile}
+                    onChange={(e) => handleInputChange("mobile", e.target.value)}
+                    required
+                  />
+                </div>
+                
+                <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
                     <Input
@@ -154,41 +166,6 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <Label>I want to:</Label>
-                  <RadioGroup
-                    value={formData.role}
-                    onValueChange={(value) => handleInputChange("role", value)}
-                    className="space-y-2"
-                  >
-                    <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <RadioGroupItem value="bidder" id="bidder" />
-                      <div className="flex items-center space-x-3 flex-1">
-                        <div className="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                          <ShoppingBag className="h-4 w-4 text-blue-600" />
-                        </div>
-                        <div>
-                          <Label htmlFor="bidder" className="font-medium">Buy & Bid</Label>
-                          <p className="text-sm text-muted-foreground">Participate in auctions and buy items</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
-                      <RadioGroupItem value="auctioneer" id="auctioneer" />
-                      <div className="flex items-center space-x-3 flex-1">
-                        <div className="flex items-center justify-center w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg">
-                          <Gavel className="h-4 w-4 text-green-600" />
-                        </div>
-                        <div>
-                          <Label htmlFor="auctioneer" className="font-medium">Sell & Auction</Label>
-                          <p className="text-sm text-muted-foreground">Create auctions and sell your items</p>
-                        </div>
-                      </div>
-                    </div>
-                  </RadioGroup>
                 </div>
                 
                 <div className="flex gap-2 pt-4">
