@@ -1,10 +1,17 @@
+
 import { AuctionCard } from "@/components/auction/AuctionCard";
 import { Button } from "@/components/ui/button";
 import { sampleAuctions } from "@/data/sampleAuctions";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function FeaturedAuctions() {
+  const navigate = useNavigate();
   const featuredAuctions = sampleAuctions.filter(auction => auction.featured);
+  
+  const handleViewAll = () => {
+    navigate('/auctions');
+  };
   
   return (
     <section className="py-16 bg-muted/30">
@@ -16,7 +23,7 @@ export function FeaturedAuctions() {
               Don't miss these exclusive auctions ending soon
             </p>
           </div>
-          <Button variant="outline" className="group">
+          <Button variant="outline" className="group" onClick={handleViewAll}>
             View All Auctions
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>

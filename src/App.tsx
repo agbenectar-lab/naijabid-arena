@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,7 @@ import AuctioneerDashboard from "./pages/AuctioneerDashboard";
 import PaymentFlow from "./pages/PaymentFlow";
 import OrderTracking from "./pages/OrderTracking";
 import CreateAuction from "./pages/CreateAuction";
+import Auctions from "./pages/Auctions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,12 +26,13 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auctions" element={<Auctions />} />
             <Route path="/auction/:id" element={<AuctionDetail />} />
             <Route path="/bidder-dashboard" element={<BidderDashboard />} />
             <Route path="/auctioneer-dashboard" element={<AuctioneerDashboard />} />
+            <Route path="/create-auction" element={<CreateAuction />} />
             <Route path="/payment/:id" element={<PaymentFlow />} />
             <Route path="/order-tracking/:id" element={<OrderTracking />} />
-            <Route path="/create-auction" element={<CreateAuction />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

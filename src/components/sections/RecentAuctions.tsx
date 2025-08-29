@@ -1,10 +1,17 @@
+
 import { AuctionCard } from "@/components/auction/AuctionCard";
 import { Button } from "@/components/ui/button";
 import { sampleAuctions } from "@/data/sampleAuctions";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function RecentAuctions() {
+  const navigate = useNavigate();
   const recentAuctions = sampleAuctions.slice(2, 8); // Get 6 recent auctions
+  
+  const handleViewAll = () => {
+    navigate('/auctions');
+  };
   
   return (
     <section className="py-16">
@@ -16,7 +23,7 @@ export function RecentAuctions() {
               Fresh auctions from trusted sellers across Nigeria
             </p>
           </div>
-          <Button variant="outline" className="group">
+          <Button variant="outline" className="group" onClick={handleViewAll}>
             View All
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>

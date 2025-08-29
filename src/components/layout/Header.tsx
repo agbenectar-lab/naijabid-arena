@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Search, Plus, User, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,23 @@ export function Header() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleUserClick = () => {
+    if (isAuthenticated) {
+      const dashboardPath = user?.role === 'auctioneer' ? '/auctioneer-dashboard' : '/bidder-dashboard';
+      navigate(dashboardPath);
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleSellClick = () => {
+    if (isAuthenticated && user?.role === 'auctioneer') {
+      navigate('/create-auction');
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleWatchlistClick = () => {
     if (isAuthenticated) {
       const dashboardPath = user?.role === 'auctioneer' ? '/auctioneer-dashboard' : '/bidder-dashboard';
       navigate(dashboardPath);
@@ -47,13 +65,13 @@ export function Header() {
           {/* Actions */}
           <div className="flex items-center space-x-2">
             {isAuthenticated && user?.role === 'auctioneer' && (
-              <Button variant="hero" size="sm" onClick={() => navigate('/create-auction')}>
+              <Button variant="hero" size="sm" onClick={handleSellClick}>
                 <Plus className="h-4 w-4 mr-2" />
                 Sell
               </Button>
             )}
             
-            <Button variant="ghost" size="sm" className="relative">
+            <Button variant="ghost" size="sm" className="relative" onClick={handleWatchlistClick}>
               <Heart className="h-5 w-5" />
               <Badge 
                 variant="destructive" 
@@ -63,7 +81,7 @@ export function Header() {
               </Badge>
             </Button>
             
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={handleUserClick}>
               <User className="h-5 w-5" />
               {isAuthenticated && <span className="ml-2 hidden md:inline">{user?.name}</span>}
             </Button>

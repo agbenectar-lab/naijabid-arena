@@ -3,6 +3,7 @@ import { Clock, Users, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface AuctionCardProps {
   id: string;
@@ -29,8 +30,10 @@ export function AuctionCard({
   category,
   seller 
 }: AuctionCardProps) {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState("");
   const [isEndingSoon, setIsEndingSoon] = useState(false);
+  const [isWatching, setIsWatching] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,8 +65,22 @@ export function AuctionCard({
     return () => clearInterval(timer);
   }, [endTime]);
 
+  const handleBidNow = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/auction/${id}`);
+  };
+
+  const handleWatch = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsWatching(!isWatching);
+  };
+
+  const handleCardClick = () => {
+    navigate(`/auction/${id}`);
+  };
+
   return (
-    <Card className="group cursor-pointer shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+    <Card className="group cursor-pointer shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1" onClick={handleCardClick}>
       <div className="relative overflow-hidden">
         <img 
           src={imageUrl} 
@@ -132,10 +149,15 @@ export function AuctionCard({
         </div>
         
         <div className="grid grid-cols-2 gap-2 w-full">
-          <Button variant="outline" size="sm">
-            Watch
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleWatch}
+            className={isWatching ? "bg-red-50 text-red-600 border-red-200" : ""}
+          >
+            {isWatching ? "Watching" : "Watch"}
           </Button>
-          <Button variant="bid" size="sm" className="animate-pulse-bid">
+          <Button variant="bid" size="sm" className="animate-pulse-bid" onClick={handleBidNow}>
             Bid Now
           </Button>
         </div>
