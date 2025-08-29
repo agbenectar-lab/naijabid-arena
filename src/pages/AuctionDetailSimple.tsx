@@ -11,6 +11,7 @@ import { sampleAuctions } from "@/data/sampleAuctions";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { AdvertisementBanner } from "@/components/advertising/AdvertisementBanner";
 import { User, Package, Shield, Star, MessageCircle } from "lucide-react";
 
 export default function AuctionDetailSimple() {
@@ -42,9 +43,13 @@ export default function AuctionDetailSimple() {
       <Header />
       
       <main className="container py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
+        {/* Top Advertisement Banner */}
+        <AdvertisementBanner position="top" className="mb-8" />
+        
+        <div className="grid lg:grid-cols-4 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-3">
+            <div className="space-y-6">
             {/* Image and Timer */}
             <div className="relative">
               <img
@@ -112,12 +117,18 @@ export default function AuctionDetailSimple() {
               </div>
             </div>
 
+            
+            {/* Inline Advertisement */}
+            <AdvertisementBanner position="inline" />
+
             {/* Bid History */}
             <BidHistoryPanel auctionId={auction.id} currentBid={auction.currentBid} />
+            </div>
           </div>
-
-          {/* Bidding Panel */}
-          <div className="lg:col-span-1">
+          
+          {/* Sidebar with Ads and Bidding */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Bidding Panel */}
             <BiddingPanel
               auctionId={auction.id}
               currentBid={auction.currentBid}
@@ -125,8 +136,15 @@ export default function AuctionDetailSimple() {
               endTime={auction.endTime.toISOString()}
               onAuthRequired={() => setShowAuthModal(true)}
             />
+            
+            {/* Sidebar Advertisements */}
+            <AdvertisementBanner position="sidebar" />
+            <AdvertisementBanner position="sidebar" />
           </div>
         </div>
+        
+        {/* Bottom Advertisement Banner */}
+        <AdvertisementBanner position="bottom" className="mt-8" />
       </main>
 
       <Footer />

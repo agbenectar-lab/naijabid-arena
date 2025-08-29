@@ -31,6 +31,8 @@ import {
   Bell
 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AdvertisementBanner } from "@/components/advertising/AdvertisementBanner";
+import { StickyAd } from "@/components/advertising/StickyAd";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -206,6 +208,9 @@ export default function Dashboard() {
       <Header />
       
       <main className="flex-1 container py-8">
+        {/* Top Advertisement Banner */}
+        <AdvertisementBanner position="top" className="mb-6 sm:mb-8" />
+
         {/* Header Section - Responsive */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
           <div className="flex-1">
@@ -261,31 +266,34 @@ export default function Dashboard() {
           })}
         </div>
 
-        {/* Dynamic Tabs - Mobile Responsive */}
-        <Tabs defaultValue={defaultTab} className="w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-            {/* Mobile: Scrollable tabs */}
-            <div className="overflow-x-auto">
-              <TabsList className="grid grid-flow-col auto-cols-max gap-1 w-max sm:w-full sm:max-w-4xl">
-                {availableTabs.slice(0, 6).map((tab) => (
-                  <TabsTrigger key={tab.value} value={tab.value} className="relative whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4">
-                    <span className="hidden sm:inline">{tab.label}</span>
-                    <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
-                    {tab.count !== null && (
-                      <Badge variant="secondary" className="ml-1 sm:ml-2 text-xs h-4 w-4 sm:h-auto sm:w-auto p-0 sm:px-1">
-                        {tab.count}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Main Content Area */}
+          <div className="lg:col-span-3">
+            {/* Dynamic Tabs - Mobile Responsive */}
+          <Tabs defaultValue={defaultTab} className="w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+              {/* Mobile: Scrollable tabs */}
+              <div className="overflow-x-auto">
+                <TabsList className="grid grid-flow-col auto-cols-max gap-1 w-max sm:w-full sm:max-w-4xl">
+                  {availableTabs.slice(0, 6).map((tab) => (
+                    <TabsTrigger key={tab.value} value={tab.value} className="relative whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4">
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                      {tab.count !== null && (
+                        <Badge variant="secondary" className="ml-1 sm:ml-2 text-xs h-4 w-4 sm:h-auto sm:w-auto p-0 sm:px-1">
+                          {tab.count}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+              
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                <Filter className="h-4 w-4 mr-2" />
+                Filter
+              </Button>
             </div>
-            
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </Button>
-          </div>
 
           {/* Active Bids Tab */}
           {hasBiddingActivity && (
@@ -302,53 +310,58 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {activeBids.map((bid) => (
-                      <div key={bid.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 sm:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                        <img 
-                          src={bid.image} 
-                          alt={bid.title}
-                          className="w-full h-32 sm:w-16 sm:h-16 object-cover rounded-lg"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold truncate">{bid.title}</h3>
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-muted-foreground">
-                            <span>Current: ₦{bid.currentBid.toLocaleString()}</span>
-                            <span>Your bid: ₦{bid.myBid.toLocaleString()}</span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {bid.timeLeft}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                          <Badge 
-                            variant={bid.status === "leading" ? "default" : "destructive"}
-                            className="self-start sm:self-center"
-                          >
-                            {bid.status === "leading" ? "Leading" : "Outbid"}
-                          </Badge>
-                          <div className="flex gap-2">
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => openContactModal("Seller Name", bid.title)}
-                              className="flex-1 sm:flex-none"
-                            >
-                              <MessageCircle className="h-4 w-4 mr-1" />
-                              <span className="hidden sm:inline">Contact</span>
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => navigate(`/auction/${bid.id}`)}
-                              className="flex-1 sm:flex-none"
-                            >
-                              View
-                            </Button>
-                          </div>
+                  {activeBids.map((bid) => (
+                    <div key={bid.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 sm:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                      <img 
+                        src={bid.image} 
+                        alt={bid.title}
+                        className="w-full h-32 sm:w-16 sm:h-16 object-cover rounded-lg"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold truncate">{bid.title}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-muted-foreground">
+                          <span>Current: ₦{bid.currentBid.toLocaleString()}</span>
+                          <span>Your bid: ₦{bid.myBid.toLocaleString()}</span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {bid.timeLeft}
+                          </span>
                         </div>
                       </div>
-                    ))}
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                        <Badge 
+                          variant={bid.status === "leading" ? "default" : "destructive"}
+                          className="self-start sm:self-center"
+                        >
+                          {bid.status === "leading" ? "Leading" : "Outbid"}
+                        </Badge>
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => openContactModal("Seller Name", bid.title)}
+                            className="flex-1 sm:flex-none"
+                          >
+                            <MessageCircle className="h-4 w-4 mr-1" />
+                            <span className="hidden sm:inline">Contact</span>
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => navigate(`/auction/${bid.id}`)}
+                            className="flex-1 sm:flex-none"
+                          >
+                            View
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Inline Ad after 2nd bid item */}
+                  {activeBids.length >= 2 && (
+                    <AdvertisementBanner position="inline" className="my-4" />
+                  )}
                   </div>
                 </CardContent>
               </Card>
@@ -741,11 +754,60 @@ export default function Dashboard() {
                 </Card>
               </div>
             </TabsContent>
-          )}
-        </Tabs>
+            )}
+          </Tabs>
+          </div>
+          
+          {/* Sidebar with Ads */}
+          <div className="hidden lg:block space-y-6">
+            <AdvertisementBanner position="sidebar" />
+            <AdvertisementBanner position="sidebar" />
+            
+            {/* Quick Actions Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button 
+                  onClick={() => navigate('/auctions')} 
+                  variant="outline" 
+                  className="w-full justify-start"
+                >
+                  <Search className="h-4 w-4 mr-2" />
+                  Browse All Auctions
+                </Button>
+                <Button 
+                  onClick={() => navigate('/create-auction')} 
+                  variant="outline" 
+                  className="w-full justify-start"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Auction
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                >
+                  <Bell className="h-4 w-4 mr-2" />
+                  Manage Alerts
+                </Button>
+              </CardContent>
+            </Card>
+            
+            {/* Bottom sidebar ad */}
+            <AdvertisementBanner position="sidebar" />
+          </div>
+        </div>
+        
+        {/* Bottom Advertisement Banner */}
+        <AdvertisementBanner position="bottom" className="mt-8" />
       </main>
 
       <Footer />
+
+      {/* Sticky Advertisement */}
+      <StickyAd position="bottom-right" />
 
       {/* Modals */}
       <ContactSellerModal
