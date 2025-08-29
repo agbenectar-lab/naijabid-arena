@@ -43,7 +43,7 @@ export function useUserRole() {
       default:
         return {
           canBid: true,
-          canCreateAuctions: false,
+          canCreateAuctions: true, // Allow bidders to sell items too
           canManageAuctions: false,
           canAccessAdminPanel: false,
           canContactSellers: true,

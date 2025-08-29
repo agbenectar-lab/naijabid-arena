@@ -10,12 +10,16 @@ import { RatingReviewModal } from "@/components/review/RatingReviewModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Gavel, Heart, Package, Trophy, TrendingUp, Clock, Eye, MessageCircle, Star } from "lucide-react";
+import { useAuctions } from "@/contexts/AuctionContext";
+import { Gavel, Heart, Package, Trophy, TrendingUp, Clock, Eye, MessageCircle, Star, Plus } from "lucide-react";
 
 export default function BidderDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { role, permissions } = useUserRole();
+  const { getUserAuctions } = useAuctions();
+  
+  const userAuctions = getUserAuctions(user?.name || "");
   
   const [contactModal, setContactModal] = useState<{
     isOpen: boolean;
@@ -151,15 +155,16 @@ export default function BidderDashboard() {
           })}
         </div>
 
-        <Tabs defaultValue="active-bids" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="active-bids">Active Bids</TabsTrigger>
+        <Tabs defaultValue="bids" className="w-full">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="bids">Active Bids</TabsTrigger>
             <TabsTrigger value="watchlist">Watchlist</TabsTrigger>
+            <TabsTrigger value="auctions">My Auctions</TabsTrigger>
             <TabsTrigger value="won">Won Auctions</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="active-bids" className="space-y-6">
+          <TabsContent value="bids" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -267,6 +272,71 @@ export default function BidderDashboard() {
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* My Auctions Tab */}
+          <TabsContent value="auctions">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <Gavel className="h-5 w-5" />
+                    My Auctions ({userAuctions.length})
+                  </CardTitle>
+                  <Button onClick={() => navigate('/create-auction')} size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Auction
+                  </Button>
+                </div>
+                <CardDescription>
+                  Auctions you've created and are currently selling
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {userAuctions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Gavel className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground mb-2">No auctions created yet</p>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Start selling your items by creating your first auction.
+                    </p>
+                    <Button onClick={() => navigate('/create-auction')}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Your First Auction
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {userAuctions.map((auction) => (
+                      <div key={auction.id} className="flex items-center gap-4 p-4 border rounded-lg">
+                        <img 
+                          src={auction.imageUrl}
+                          alt={auction.title}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{auction.title}</h3>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                            <span>Current: ₦{auction.currentBid.toLocaleString()}</span>
+                            <span>{auction.bidCount} bids</span>
+                            <span>Ends: {new Date(auction.endTime).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => navigate(`/auction/${auction.id}`)}
+                          >
+                            View
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

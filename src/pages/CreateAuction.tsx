@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,14 @@ export default function CreateAuction() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addAuction } = useAuctions();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
   
   const [images, setImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
@@ -98,7 +105,7 @@ export default function CreateAuction() {
       variant: "default"
     });
     
-    navigate('/auctioneer-dashboard');
+    navigate('/bidder-dashboard');
   };
 
   const categories = [

@@ -23,7 +23,7 @@ export function Header() {
   };
 
   const handleSellClick = () => {
-    if (isAuthenticated && user?.role === 'auctioneer') {
+    if (isAuthenticated) {
       navigate('/create-auction');
     } else {
       setShowAuthModal(true);
@@ -64,12 +64,10 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-2">
-            {isAuthenticated && user?.role === 'auctioneer' && (
-              <Button variant="hero" size="sm" onClick={handleSellClick}>
-                <Plus className="h-4 w-4 mr-2" />
-                Sell
-              </Button>
-            )}
+            <Button variant="hero" size="sm" onClick={handleSellClick}>
+              <Plus className="h-4 w-4 mr-2" />
+              Sell Your Items
+            </Button>
             
             <Button variant="ghost" size="sm" className="relative" onClick={handleWatchlistClick}>
               <Heart className="h-5 w-5" />
