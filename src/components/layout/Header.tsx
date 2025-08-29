@@ -15,8 +15,7 @@ export function Header() {
 
   const handleUserClick = () => {
     if (isAuthenticated) {
-      const dashboardPath = user?.role === 'auctioneer' ? '/auctioneer-dashboard' : '/bidder-dashboard';
-      navigate(dashboardPath);
+      navigate('/dashboard');
     } else {
       setShowAuthModal(true);
     }
@@ -32,8 +31,7 @@ export function Header() {
 
   const handleWatchlistClick = () => {
     if (isAuthenticated) {
-      const dashboardPath = user?.role === 'auctioneer' ? '/auctioneer-dashboard' : '/bidder-dashboard';
-      navigate(dashboardPath);
+      navigate('/dashboard');
     } else {
       setShowAuthModal(true);
     }
