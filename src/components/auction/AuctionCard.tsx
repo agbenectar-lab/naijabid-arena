@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
-import { Clock, Users, Tag } from "lucide-react";
+import { useState } from "react";
+import { Users, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { AuctionTimer } from "./AuctionTimer";
 import { useNavigate } from "react-router-dom";
+import { useBidManager } from "@/hooks/useBidManager";
 
 interface AuctionCardProps {
   id: string;
@@ -31,39 +33,10 @@ export function AuctionCard({
   seller 
 }: AuctionCardProps) {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState("");
-  const [isEndingSoon, setIsEndingSoon] = useState(false);
+  const { getHighestBid } = useBidManager();
   const [isWatching, setIsWatching] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = endTime.getTime() - now;
-      
-      if (distance < 0) {
-        setTimeLeft("Auction ended");
-        clearInterval(timer);
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setIsEndingSoon(distance < 3600000); // Less than 1 hour
-      
-      if (days > 0) {
-        setTimeLeft(`${days}d ${hours}h`);
-      } else if (hours > 0) {
-        setTimeLeft(`${hours}h ${minutes}m`);
-      } else {
-        setTimeLeft(`${minutes}m ${seconds}s`);
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [endTime]);
+  
+  const displayCurrentBid = getHighestBid(id)?.amount || currentBid;
 
   const handleBidNow = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -93,14 +66,9 @@ export function AuctionCard({
         >
           {category}
         </Badge>
-        {isEndingSoon && (
-          <Badge 
-            variant="destructive"
-            className="absolute top-2 left-2 animate-pulse"
-          >
-            Ending Soon!
-          </Badge>
-        )}
+        <div className="absolute top-2 left-2">
+          <AuctionTimer endTime={endTime.toISOString()} size="sm" />
+        </div>
       </div>
       
       <CardContent className="p-4">
@@ -115,7 +83,7 @@ export function AuctionCard({
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Current bid</span>
             <span className="text-xl font-bold text-primary">
-              ₦{currentBid.toLocaleString()}
+              ₦{displayCurrentBid.toLocaleString()}
             </span>
           </div>
           
@@ -131,13 +99,7 @@ export function AuctionCard({
       </CardContent>
       
       <CardFooter className="p-4 pt-0 space-y-3">
-        <div className="grid grid-cols-3 gap-2 w-full text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span className={isEndingSoon ? "text-warning font-medium" : ""}>
-              {timeLeft}
-            </span>
-          </div>
+        <div className="grid grid-cols-2 gap-2 w-full text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Users className="w-4 h-4" />
             <span>{bidCount} bids</span>

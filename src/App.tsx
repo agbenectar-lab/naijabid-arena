@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AuctionProvider } from "@/contexts/AuctionContext";
 import Index from "./pages/Index";
-import AuctionDetail from "./pages/AuctionDetail";
+import AuctionDetail from "./pages/AuctionDetailSimple";
 import BidderDashboard from "./pages/BidderDashboard";
 import AuctioneerDashboard from "./pages/AuctioneerDashboard";
 import PaymentFlow from "./pages/PaymentFlow";
