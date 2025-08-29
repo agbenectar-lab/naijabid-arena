@@ -15,7 +15,7 @@ export default function Auctions() {
       <main className="flex-1 container py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">All Auctions</h1>
-          <p className="text-muted-foreground">Browse all active auctions on NaijaAuction</p>
+          <p className="text-muted-foreground">Browse all active auctions on OyaBid</p>
         </div>
 
         {/* Filters */}

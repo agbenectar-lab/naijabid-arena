@@ -46,9 +46,9 @@ export function Header() {
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="flex items-center justify-center w-8 h-8 bg-auction-gradient rounded-lg">
-              <span className="text-primary-foreground font-bold text-sm">NA</span>
+              <span className="text-primary-foreground font-bold text-sm">OB</span>
             </div>
-            <span className="font-bold text-xl text-primary">NaijaAuction</span>
+            <span className="font-bold text-xl text-primary">OyaBid</span>
           </div>
 
           {/* Search */}

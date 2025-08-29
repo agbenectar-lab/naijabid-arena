@@ -11,9 +11,9 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="flex items-center justify-center w-8 h-8 bg-auction-gradient rounded-lg">
-                <span className="text-primary-foreground font-bold text-sm">NA</span>
+                <span className="text-primary-foreground font-bold text-sm">OB</span>
               </div>
-              <span className="font-bold text-xl text-primary">NaijaAuction</span>
+              <span className="font-bold text-xl text-primary">OyaBid</span>
             </div>
             <p className="text-muted-foreground">
               Nigeria's most trusted auction platform. Buy, sell, and bid with confidence.
@@ -59,7 +59,7 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">hello@naijauction.com</span>
+                <span className="text-sm">hello@oyabid.com</span>
               </div>
               <div className="flex items-center space-x-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />
@@ -82,7 +82,7 @@ export function Footer() {
         </div>
 
         <div className="border-t mt-12 pt-8 text-center text-muted-foreground">
-          <p>&copy; 2024 NaijaAuction. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <p>&copy; 2024 OyaBid. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
       </div>
     </footer>

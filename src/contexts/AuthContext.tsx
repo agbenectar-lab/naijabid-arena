@@ -20,17 +20,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('naijauction_user', JSON.stringify(userData));
+    localStorage.setItem('oyabid_user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('naijauction_user');
+    localStorage.removeItem('oyabid_user');
   };
 
   // Initialize user from localStorage on mount
   useState(() => {
-    const savedUser = localStorage.getItem('naijauction_user');
+    const savedUser = localStorage.getItem('oyabid_user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }

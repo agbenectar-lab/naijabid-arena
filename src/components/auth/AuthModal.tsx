@@ -44,9 +44,9 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
       <Card className="w-full max-w-md shadow-card-hover">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center w-12 h-12 bg-auction-gradient rounded-full mx-auto mb-4">
-            <span className="text-primary-foreground font-bold text-lg">NA</span>
+            <span className="text-primary-foreground font-bold text-lg">OB</span>
           </div>
-          <CardTitle className="text-2xl">Welcome to NaijaAuction</CardTitle>
+          <CardTitle className="text-2xl">Welcome to OyaBid</CardTitle>
           <CardDescription>
             Join Nigeria's premier auction platform
           </CardDescription>

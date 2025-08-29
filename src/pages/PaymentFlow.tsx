@@ -192,7 +192,7 @@ export default function PaymentFlow() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span>Account Name:</span>
-                          <span className="font-medium">NaijaAuction Escrow</span>
+                          <span className="font-medium">OyaBid Escrow</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Account Number:</span>
