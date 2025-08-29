@@ -2,24 +2,59 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OyaBid - Nigeria's Premier Online Auction Platform</title>
-    <meta name="description" content="Buy, sell and bid on authentic items in Nigeria's most trusted auction marketplace. Electronics, fashion, vehicles and more. Safe transactions guaranteed." />
-    <meta name="keywords" content="Nigeria auction, online bidding, buy sell Nigeria, auction platform, marketplace Nigeria" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="OyaBid" />
+    <meta name="msapplication-TileColor" content="#4f46e5" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-512x512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-512x512.png" />
+    
+    <!-- SEO Meta Tags -->
+    <title>OyaBid - Nigeria's Premier Auction Platform</title>
+    <meta name="description" content="OyaBid - Nigeria's premier auction platform for buying and selling items safely and securely" />
+    <meta name="keywords" content="auction, Nigeria, buy, sell, marketplace, bidding, online auction" />
     <meta name="author" content="OyaBid" />
-
-    <meta property="og:title" content="OyaBid - Nigeria's Premier Online Auction Platform" />
-    <meta property="og:description" content="Buy, sell and bid on authentic items in Nigeria's most trusted auction marketplace. Safe transactions guaranteed." />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="OyaBid - Nigeria's Premier Auction Platform" />
+    <meta property="og:description" content="Buy and sell items through Nigeria's most trusted auction platform" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
+    <meta property="og:image" content="/icons/icon-512x512.png" />
+    
+    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:title" content="OyaBid - Nigeria's Premier Auction Platform" />
+    <meta name="twitter:description" content="Buy and sell items through Nigeria's most trusted auction platform" />
+    <meta name="twitter:image" content="/icons/icon-512x512.png" />
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

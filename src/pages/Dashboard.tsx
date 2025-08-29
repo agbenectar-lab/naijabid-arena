@@ -206,52 +206,53 @@ export default function Dashboard() {
       <Header />
       
       <main className="flex-1 container py-8">
-        {/* Header Section */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.name}!</h1>
-            <div className="flex items-center gap-2">
-              <p className="text-muted-foreground">
+        {/* Header Section - Responsive */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome back, {user?.name}!</h1>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 Your complete auction hub - Buy, sell, and manage all activities
               </p>
-              <Badge variant="outline" className="bg-gradient-to-r from-primary/10 to-primary/20">
+              <Badge variant="outline" className="bg-gradient-to-r from-primary/10 to-primary/20 w-fit">
                 {hasSellingActivity && hasBiddingActivity ? "Buyer & Seller" : 
                  hasSellingActivity ? "Seller" : "Buyer"}
               </Badge>
             </div>
           </div>
           
-          {/* Quick Actions */}
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+          {/* Quick Actions - Mobile Responsive */}
+          <div className="flex flex-wrap gap-2 sm:gap-2">
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
               <Bell className="h-4 w-4 mr-2" />
-              Alerts
+              <span className="hidden sm:inline">Alerts</span>
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
               <Search className="h-4 w-4 mr-2" />
-              Browse
+              <span className="hidden sm:inline">Browse</span>
             </Button>
-            <Button onClick={() => navigate('/create-auction')} className="bg-gradient-to-r from-primary to-primary/80">
+            <Button onClick={() => navigate('/create-auction')} className="bg-gradient-to-r from-primary to-primary/80 flex-1 sm:flex-none">
               <Plus className="h-4 w-4 mr-2" />
-              Create Auction
+              <span className="hidden xs:inline">Create</span>
+              <span className="hidden sm:inline">Auction</span>
             </Button>
           </div>
         </div>
 
-        {/* Adaptive Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Adaptive Stats - Mobile Responsive Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
           {adaptiveStats.map((stat) => {
             const Icon = stat.icon;
             return (
               <Card key={stat.label} className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-primary/20">
-                <CardContent className="p-6">
+                <CardContent className="p-3 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                      <p className="text-2xl font-bold">{stat.value}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">{stat.label}</p>
+                      <p className="text-lg sm:text-2xl font-bold truncate">{stat.value}</p>
                     </div>
-                    <div className="p-3 rounded-full bg-gradient-to-br from-primary/10 to-primary/20">
-                      <Icon className={`h-6 w-6 ${stat.color}`} />
+                    <div className="p-2 sm:p-3 rounded-full bg-gradient-to-br from-primary/10 to-primary/20 ml-2">
+                      <Icon className={`h-4 w-4 sm:h-6 sm:w-6 ${stat.color}`} />
                     </div>
                   </div>
                 </CardContent>
@@ -260,23 +261,27 @@ export default function Dashboard() {
           })}
         </div>
 
-        {/* Dynamic Tabs */}
+        {/* Dynamic Tabs - Mobile Responsive */}
         <Tabs defaultValue={defaultTab} className="w-full">
-          <div className="flex items-center justify-between mb-4">
-            <TabsList className="grid grid-cols-7 w-full max-w-4xl">
-              {availableTabs.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value} className="relative">
-                  {tab.label}
-                  {tab.count !== null && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
-                      {tab.count}
-                    </Badge>
-                  )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+            {/* Mobile: Scrollable tabs */}
+            <div className="overflow-x-auto">
+              <TabsList className="grid grid-flow-col auto-cols-max gap-1 w-max sm:w-full sm:max-w-4xl">
+                {availableTabs.slice(0, 6).map((tab) => (
+                  <TabsTrigger key={tab.value} value={tab.value} className="relative whitespace-nowrap text-xs sm:text-sm px-2 sm:px-4">
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+                    {tab.count !== null && (
+                      <Badge variant="secondary" className="ml-1 sm:ml-2 text-xs h-4 w-4 sm:h-auto sm:w-auto p-0 sm:px-1">
+                        {tab.count}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
             
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
               <Filter className="h-4 w-4 mr-2" />
               Filter
             </Button>
@@ -298,15 +303,15 @@ export default function Dashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     {activeBids.map((bid) => (
-                      <div key={bid.id} className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                      <div key={bid.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 sm:p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                         <img 
                           src={bid.image} 
                           alt={bid.title}
-                          className="w-16 h-16 object-cover rounded-lg"
+                          className="w-full h-32 sm:w-16 sm:h-16 object-cover rounded-lg"
                         />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{bid.title}</h3>
-                          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold truncate">{bid.title}</h3>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2 text-sm text-muted-foreground">
                             <span>Current: ₦{bid.currentBid.toLocaleString()}</span>
                             <span>Your bid: ₦{bid.myBid.toLocaleString()}</span>
                             <span className="flex items-center gap-1">
@@ -315,9 +320,10 @@ export default function Dashboard() {
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                           <Badge 
                             variant={bid.status === "leading" ? "default" : "destructive"}
+                            className="self-start sm:self-center"
                           >
                             {bid.status === "leading" ? "Leading" : "Outbid"}
                           </Badge>
@@ -326,14 +332,16 @@ export default function Dashboard() {
                               size="sm" 
                               variant="outline"
                               onClick={() => openContactModal("Seller Name", bid.title)}
+                              className="flex-1 sm:flex-none"
                             >
                               <MessageCircle className="h-4 w-4 mr-1" />
-                              Contact
+                              <span className="hidden sm:inline">Contact</span>
                             </Button>
                             <Button 
                               variant="outline" 
                               size="sm"
                               onClick={() => navigate(`/auction/${bid.id}`)}
+                              className="flex-1 sm:flex-none"
                             >
                               View
                             </Button>
