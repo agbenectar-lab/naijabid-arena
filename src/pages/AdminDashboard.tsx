@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import UserManagement from "@/components/admin/UserManagement";
+import CategoryManagement from "@/components/admin/CategoryManagement";
 import AuctionManagement from "@/components/admin/AuctionManagement";
 import FinancialManagement from "@/components/admin/FinancialManagement";
 import ContentModeration from "@/components/admin/ContentModeration";
@@ -24,6 +25,8 @@ const AdminDashboard: React.FC = () => {
     switch (activeSection) {
       case "users":
         return <UserManagement />;
+      case "categories":
+        return <CategoryManagement />;
       case "auctions":
         return <AuctionManagement />;
       case "financial":

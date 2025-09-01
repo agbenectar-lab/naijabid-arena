@@ -2,7 +2,7 @@ import React from "react"
 import { NavLink, useLocation } from "react-router-dom"
 import {
   Users, Gavel, DollarSign, Shield, BarChart3, Settings,
-  Megaphone, MessageSquare, Activity, TrendingUp
+  Megaphone, MessageSquare, Activity, TrendingUp, Package
 } from "lucide-react"
 
 import {
@@ -25,6 +25,7 @@ interface SidebarItem {
 
 const adminNavItems: SidebarItem[] = [
   { title: "Users", value: "users", icon: Users },
+  { title: "Categories", value: "categories", icon: Package },
   { title: "Auctions", value: "auctions", icon: Gavel },
   { title: "Finances", value: "financial", icon: DollarSign },
   { title: "Content Moderation", value: "moderation", icon: Shield },
